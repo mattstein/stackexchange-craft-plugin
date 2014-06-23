@@ -4,7 +4,7 @@ A quick little plugin for making your precious [Craft CMS Stack Exchange](http:/
 
 ### Example
 
-Use `craft.stackExchange.getProfile()` with your Stack Exchange account ID. (http://craftcms.stackexchange.com/users/**YOUR ID**):
+Use `craft.stackExchange.getProfile()` with your Stack Exchange account ID. (`http://craftcms.stackexchange.com/users/**YOUR ID**`):
 
 ```
 {% set se = craft.stackExchange.getProfile(22) %}
@@ -36,4 +36,4 @@ Use `craft.stackExchange.getProfile()` with your Stack Exchange account ID. (htt
 
 ### Installation
 
-Like other plugins, drop the `stackexchange` folder into your `craft/plugins` folder, visit Settings → Plugins in the control panel, and choose "Install."
+Like other plugins, drop the `stackexchange` folder into your `craft/plugins` directory, visit Settings → Plugins in the control panel, and choose "Install." Then you can start using `craft.stackExchange` in your templates.
