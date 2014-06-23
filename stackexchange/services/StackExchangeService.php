@@ -5,14 +5,13 @@ namespace Craft;
 class StackExchangeService extends BaseApplicationComponent
 {
 
-	protected $_stackExchange;
 	protected $_apiUrl;
-
 	
-	public function __construct($stackExchange = null)
+	public function init()
 	{
-		$this->_stackExchange = $stackExchange;
-		$this->_apiUrl        = 'http://api.stackexchange.com/2.2/';
+		parent::init();
+
+		$this->_apiUrl = 'http://api.stackexchange.com/2.2/';
 	}
 
 	
