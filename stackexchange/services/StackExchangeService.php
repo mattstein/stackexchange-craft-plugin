@@ -20,21 +20,37 @@ class StackExchangeService extends BaseApplicationComponent
 		$ids     = is_array($ids) ? implode(";", $ids) : $ids;
 		$request = $this->_curlRequest('users/'.$ids, array( 'site' => 'craftcms' ));
 
-		if ( ! empty($request->items))
-			return $request->items;
-		else
-			return false;
-	}
+		if ( ! empty($request->items)) {
 
+			foreach($request->items as $item)
+			{
+				foreach($item as $key => $value)
+				{
+					if (is_array($value))
+					{
+						$this->_updateKeys($value);
+					}
+					else
+					{
+						$this->_updateKeys($item);
+					}
+				}
+			}
+
+			if (sizeof($request->items) > 1)
+				return $request->items;
+			else
+				return $request->items[0];
+		} else {
+			return false;
+		}
+	}
 
 	public function getProfile($id)
 	{
 		$request = $this->getProfiles($id);
 
-		if ( ! empty($request[0]))
-			return $request[0];
-		else
-			return false;
+		return $request;
 	}
 
 	
@@ -59,6 +75,17 @@ class StackExchangeService extends BaseApplicationComponent
 		curl_close($ch);
 
 		return json_decode($response);
+	}
+
+
+	private function _updateKeys($item)
+	{
+		foreach($item as $key => $value) {
+			if (strpos($key, '_') !== FALSE) {
+				$item->{$this->_to_camel_case($key)} = $value;
+				unset($item->{$key});
+			}
+		}
 	}
 
 

@@ -4,35 +4,46 @@ A quick little plugin for making your precious [Craft CMS Stack Exchange](http:/
 
 ### Example
 
-Use `craft.stackExchange.getProfile()` with your Stack Exchange account ID. (`http://craftcms.stackexchange.com/users/**YOUR ID**`):
+Use `craft.stackExchange.getProfile()` with your Stack Exchange account ID (`http://craftcms.stackexchange.com/users/**YOUR ID**`) to get a single result:
 
 ```
-{% set se = craft.stackExchange.getProfile(22) %}
+{% set profile = craft.stackExchange.getProfile(22) %}
 
-{{ se.reputation_change_day }} {# 7 #}
-{{ se.badge_counts.bronze }} {# 18 #}
-{{ se.badge_counts.silver }} {# 2 #}
-{{ se.badge_counts.gold }} {# 0 #}
-{{ se.badge_counts.location }} {# "Seattle" #}
-{{ se.profile_image }} {# "http://i.stack.imgur.com/zwqV6.jpg?s=128&g=1" #}
-{{ se.last_access_date }} {# 1403550544 #}
-{{ se.accept_rate }} {# 100 #}
-{{ se.link }} {# "http://craftcms.stackexchange.com/users/22/matt-stein" #}
-{{ se.user_id }} {# 22 #}
-{{ se.reputation_change_week }} {# 12 #}
-{{ se.is_employee }} {# false #}
-{{ se.website_url }} {# "http://workingconcept.com/" #}
-{{ se.creation_date }} {# 1402531180 #}
-{{ se.reputation_change_year }} {# 722 #}
-{{ se.reputation }} {# 723 #}
-{{ se.last_modified_date }} {# 1403051477 #}
-{{ se.reputation_change_quarter }} {# 722 #}
-{{ se.user_type }} {# "registered" #}
-{{ se.account_id }} {# 482701 #}
-{{ se.age }} {# 30 #}
-{{ se.display_name }} {# "Matt Stein" #}
-{{ se.reputation_change_month }} {# 722 #}
+{{ profile.accountId }} {# 482701 #}
+{{ profile.userId }} {# 22 #}
+{{ profile.userType }} {# "registered" #}
+{{ profile.displayName }} {# "Matt Stein" #}
+{{ profile.creationDate }} {# 1402531180 #}
+{{ profile.lastModifiedDate }} {# 1403051477 #}
+{{ profile.lastAccessDate }} {# 1403550544 #}
+{{ profile.reputation }} {# 723 #}
+{{ profile.reputationChangeDay }} {# 7 #}
+{{ profile.reputationChangeWeek }} {# 12 #}
+{{ profile.reputationChangeMonth }} {# 722 #}
+{{ profile.reputationChangeQuarter }} {# 722 #}
+{{ profile.reputationChangeYear }} {# 722 #}
+{{ profile.location }} {# "Seattle" #}
+{{ profile.websiteUrl }} {# "http://workingconcept.com/" #}
+{{ profile.link }} {# "http://craftcms.stackexchange.com/users/22/matt-stein" #}
+{{ profile.profileImage }} {# "http://i.stack.imgur.com/zwqV6.jpg?s=128&g=1" #}
+{{ profile.age }} {# 30 #}
+{{ profile.badgeCounts.bronze }} {# 18 #}
+{{ profile.badgeCounts.silver }} {# 2 #}
+{{ profile.badgeCounts.gold }} {# 0 #}
+{{ profile.acceptRate }} {# 100 #}
+{{ profile.isEmployee }} {# false #}
 ```
+
+Alternatively, you can use `craft.stackExchange.getProfiles()` to get one or several results.
+
+```
+{% set profile = craft.stackExchange.getProfiles(22) %}
+{# identical to above #}
+
+{% set profiles = craft.stackExchange.getProfiles([22, 115]) %}
+{# loop through profiles for each result object #}
+```
+
 
 ### Installation
 
