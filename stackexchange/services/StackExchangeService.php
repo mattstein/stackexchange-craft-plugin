@@ -14,27 +14,25 @@ class StackExchangeService extends BaseApplicationComponent
 		$this->_apiUrl = 'http://api.stackexchange.com/2.2/';
 	}
 
-	
-	public function getProfile($id)
-	{
-		$request = $this->_curlRequest('users/'.$id, array( 'site' => 'craftcms' ));
 
-		if ( ! empty($request->items[0]))
-			return $request->items[0];
+	public function getProfiles($ids = array())
+	{
+		$ids     = is_array($ids) ? implode(";", $ids) : $ids;
+		$request = $this->_curlRequest('users/'.$ids, array( 'site' => 'craftcms' ));
+
+		if ( ! empty($request->items))
+			return $request->items;
 		else
 			return false;
 	}
 
-	public function getProfiles($ids = array())
+
+	public function getProfile($id)
 	{
-		$request = $this->_curlRequest('users/'.implode(";", $ids), array( 'site' => 'craftcms' ));
+		$request = $this->getProfiles($id);
 
-		echo '<pre>';
-		print_r($request);
-		echo '</pre>';
-
-		if ( ! empty($request->items))
-			return $request->items;
+		if ( ! empty($request[0]))
+			return $request[0];
 		else
 			return false;
 	}
@@ -62,5 +60,28 @@ class StackExchangeService extends BaseApplicationComponent
 
 		return json_decode($response);
 	}
+
+
+	/**
+	 * Translates a string with underscores
+	 * into camel case (e.g. first_name -> firstName)
+	 * https://gist.githubusercontent.com/paulferrett/8141290/raw/camel_case_functions.php
+	 *
+	 * @param string $str String in underscore format
+	 * @param bool $capitalise_first_char If true, capitalise the first char in $str
+	 * @return string $str translated into camel caps
+	 */
+	
+	private function _to_camel_case($str, $capitalise_first_char = false)
+	{
+		if ($capitalise_first_char) {
+			$str[0] = strtoupper($str[0]);
+		}
+
+		$func = create_function('$c', 'return strtoupper($c[1]);');
+		
+		return preg_replace_callback('/_([a-z])/', $func, $str);
+	}
+
 
 }
