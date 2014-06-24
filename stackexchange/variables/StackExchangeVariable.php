@@ -9,5 +9,10 @@ class StackExchangeVariable
 	{		
 		return craft()->stackExchange->getProfile($id);
 	}	
+
+	public function getProfiles($ids = array())
+	{		
+		return craft()->stackExchange->getProfiles($ids);
+	}	
 	
 }

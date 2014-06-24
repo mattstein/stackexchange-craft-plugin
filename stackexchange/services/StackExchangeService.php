@@ -25,6 +25,20 @@ class StackExchangeService extends BaseApplicationComponent
 			return false;
 	}
 
+	public function getProfiles($ids = array())
+	{
+		$request = $this->_curlRequest('users/'.implode(";", $ids), array( 'site' => 'craftcms' ));
+
+		echo '<pre>';
+		print_r($request);
+		echo '</pre>';
+
+		if ( ! empty($request->items))
+			return $request->items;
+		else
+			return false;
+	}
+
 	
 	private function _curlRequest($uri = '', $data = array())
 	{
