@@ -7,6 +7,7 @@ class StackExchangeService extends BaseApplicationComponent
 
 	protected $_apiUrl;
 	
+	
 	public function init()
 	{
 		parent::init();
@@ -56,25 +57,38 @@ class StackExchangeService extends BaseApplicationComponent
 	
 	private function _curlRequest($uri = '', $data = array())
 	{
-		$baseUrl = $this->_apiUrl;
-		$apiUrl  = $baseUrl . $uri;
-		
 		if ( ! empty($data))
-			$apiUrl .= '?' . http_build_query($data);
+			$uri .= '?' . http_build_query($data);
 
-		$ch = curl_init();
+		$cachedResponse = craft()->fileCache->get($uri);
 
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json; charset=utf-8","Accept:application/json, text/javascript, */*; q=0.01")); 
-		curl_setopt($ch, CURLOPT_URL, $apiUrl);
-		curl_setopt($ch, CURLOPT_ENCODING , "gzip");
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+		if ($cachedResponse) {
+			return json_decode($cachedResponse);
+		}
 
-		$response = trim(curl_exec($ch));
-		curl_close($ch);
+		try {
+			$client   = new \Guzzle\Http\Client($this->_apiUrl);
+			$request  = $client->get($uri, array(), array(
+				'headers' => array(
+					'Content-Type'    => 'application/json; charset=utf-8',
+					'Accept'          => 'application/json, text/javascript, */*; q=0.01',
+					'Accept-Encoding' => 'gzip'
+				)
+			));
 
-		return json_decode($response);
+			$response = $request->send();
+
+			if ( ! $response->isSuccessful()) {
+				return;
+			}
+
+			craft()->fileCache->set($uri, $response->getBody(true), 1800); // set to expire in 30 minutes
+
+			return json_decode($response->getBody(true));
+		} catch(\Exception $e) {
+			return;
+		}
+
 	}
 
 
